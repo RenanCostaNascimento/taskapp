@@ -52,3 +52,22 @@ export function sendEmail(body, callback, errorCallback){
     }
   });
 }
+
+/**
+ * A explicação do porquê utilizar essa função, e também o que ela faz pode ser visto aqui:
+ * https://github.com/yahoo/react-intl/wiki/Upgrade-Guide#flatten-messages-object
+ */
+export function flattenMessages(nestedMessages, prefix = '') {
+  return Object.keys(nestedMessages).reduce((messages, key) => {
+      let value       = nestedMessages[key];
+      let prefixedKey = prefix ? `${prefix}.${key}` : key;
+
+      if (typeof value === 'string') {
+          messages[prefixedKey] = value;
+      } else {
+          Object.assign(messages, flattenMessages(value, prefixedKey));
+      }
+
+      return messages;
+  }, {});
+}
