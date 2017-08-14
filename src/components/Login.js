@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl';
 import SigninUserMutation from '../mutations/SigninUserMutation'
 import { InputGroup, Position, Toaster, Intent } from "@blueprintjs/core";
 import { showToast, saveUserData } from '../utils'
@@ -11,7 +12,7 @@ class Login extends Component {
   state = {
     email: '',
     password: ''
-  }
+  };
 
   render() {
 
@@ -25,16 +26,16 @@ class Login extends Component {
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
                   <InputGroup leftIconName="envelope" placeholder="Email"
-                  onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
-                  <InputGroup leftIconName="lock" placeholder="Password" type="password"
-                  onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password}/>
+                    onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
+                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({id: 'login.senha' })} type="password"
+                    onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
                   <button type="button" className="pt-button pt-intent-primary pt-fill" onClick={() => this.validateUserInfo()}>
-                    Login
+                    <FormattedMessage id="login.entrar" />
                   </button>
-                  <br/><br/>
-                  or
-                  <br/><br/>
-                  <a onClick={() => this.props.history.push(`/signup`)}>Create an account for free</a>
+                  <br /><br />
+                  <FormattedMessage id="comum.ou" />
+                  <br /><br />
+                  <a onClick={() => this.props.history.push(`/signup`)}><FormattedMessage id="login.criar-conta" /></a>
                 </div>
               </div>
               <div className="footer">
@@ -48,8 +49,7 @@ class Login extends Component {
             </div>
           </div>
         </div>
-      </div>
-
+      </div >
     )
   }
 
@@ -57,8 +57,8 @@ class Login extends Component {
   * Valida os dados do usuário antes do login.
   * @return {[type]} [description]
   */
-  validateUserInfo(){
-    this.state.email && this.state.password ? this.login() : showToast(this.toaster, Intent.DANGER, 'Please fill in the form.');
+  validateUserInfo() {
+    this.state.email && this.state.password ? this.login() : showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'login.preencher-formulario' }));
   }
 
   /**
@@ -75,5 +75,9 @@ class Login extends Component {
   }
 
 }
+
+Login.contextTypes = {
+  intl: React.PropTypes.object.isRequired
+};
 
 export default Login
