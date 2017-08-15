@@ -27,10 +27,10 @@ const mutation = graphql`
  * @param {function} callback Callback de sucesso, quando o login for efetuado.
  * @param {function} errorCallback Callback de erro, quando o login não for efetuado.
  */
-export default (name, email, password, callback, errorCallback) => {
+export default (userName, email, password, callback, errorCallback) => {
   const variables = {
     createUserInput: {
-      name,
+      userName,
       authProvider: {
         email: {
           email,

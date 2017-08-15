@@ -9,7 +9,7 @@ class SignUpConfirmation extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
+      userName: '',
       email: this.props.match.params.email,
       password: '',
       passwordConfirmation: ''
@@ -31,7 +31,7 @@ class SignUpConfirmation extends Component {
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
                   <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-usuario' })}
-                    onChange={(e) => this.setState({ name: e.target.value })} value={this.state.name} />
+                    onChange={(e) => this.setState({ userName: e.target.value })} value={this.state.userName} />
                   <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.digitar-senha' })}
                     type="password" onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
                   <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.confirmar-senha' })}
@@ -61,7 +61,7 @@ class SignUpConfirmation extends Component {
    * Valida as informações do usuário: e-mail e senha.
    */
   validateUserInfo() {
-    if (this.state.name) {
+    if (this.state.userName) {
       if (validateEmail(this.state.email)) {
         if (this.validatePassword(this.state.password) && this.state.password === this.state.passwordConfirmation) {
           this.createAccount();
@@ -90,8 +90,8 @@ class SignUpConfirmation extends Component {
   * Tenta criar a conta do usuário;
   */
   createAccount = () => {
-    const { name, email, password } = this.state
-    CreateUserMutation(name, email, password, (id, token) => {
+    const { userName, email, password } = this.state
+    CreateUserMutation(userName, email, password, (id, token) => {
       saveUserData(id, token);
       var onDismiss = () => {
         this.props.history.push(`/`);
@@ -112,7 +112,7 @@ class SignUpConfirmation extends Component {
       params: {
         header: this.context.intl.formatMessage({ id: 'signup-confirmation.email-cabecalho' }),
         iconURL: 'http://cdn.htmlemailtemplates.net/images/ok.png',
-        helloMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-alo' }) + this.state.name,
+        helloMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-alo' }) + this.state.userName,
         firstParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-primeiro-paragrafo' }),
         secondParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-segundo-paragrafo' }),
         buttonMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-botao' }),

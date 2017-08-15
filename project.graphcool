@@ -1,5 +1,5 @@
 # project: cj5eh3xx6f2nw0127yiduyb9d
-# version: 2
+# version: 5
 
 type File implements Node {
   contentType: String!
@@ -18,4 +18,5 @@ type User implements Node {
   id: ID! @isUnique
   password: String
   updatedAt: DateTime!
+  userName: String
 }
