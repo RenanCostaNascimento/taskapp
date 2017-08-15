@@ -9,6 +9,7 @@ class SignUpConfirmation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      fullName: '',
       userName: '',
       email: this.props.match.params.email,
       password: '',
@@ -30,6 +31,8 @@ class SignUpConfirmation extends Component {
               <h2 className="title">taskapp</h2>
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
+                  <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-completo' })}
+                    onChange={(e) => this.setState({ fullName: e.target.value })} value={this.state.fullName} />
                   <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-usuario' })}
                     onChange={(e) => this.setState({ userName: e.target.value })} value={this.state.userName} />
                   <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.digitar-senha' })}
@@ -61,7 +64,7 @@ class SignUpConfirmation extends Component {
    * Valida as informações do usuário: e-mail e senha.
    */
   validateUserInfo() {
-    if (this.state.userName) {
+    if (this.state.fullName && this.state.userName) {
       if (validateEmail(this.state.email)) {
         if (this.validatePassword(this.state.password) && this.state.password === this.state.passwordConfirmation) {
           this.createAccount();
@@ -90,8 +93,8 @@ class SignUpConfirmation extends Component {
   * Tenta criar a conta do usuário;
   */
   createAccount = () => {
-    const { userName, email, password } = this.state
-    CreateUserMutation(userName, email, password, (id, token) => {
+    const { fullName, userName, email, password } = this.state
+    CreateUserMutation(fullName, userName, email, password, (id, token) => {
       saveUserData(id, token);
       var onDismiss = () => {
         this.props.history.push(`/`);

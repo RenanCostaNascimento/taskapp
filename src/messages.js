@@ -23,6 +23,7 @@ export default {
             "preencher-formulario": "Please, fill in the form"
         },
         "signup-confirmation": {
+            "nome-completo": "Full Name",
             "nome-usuario": "User Name",
             "digitar-senha": "Type your password",
             "confirmar-senha": "Confirm your password",
@@ -67,6 +68,7 @@ export default {
             "preencher-formulario": "Por favor, preencha o formulário"
         },
         "signup-confirmation": {
+            "nome-completo": "Nome Completo",
             "nome-usuario": "Nome do Usuário",
             "digitar-senha": "Digite sua senha",
             "confirmar-senha": "Confirme sua senha",

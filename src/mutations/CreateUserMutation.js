@@ -22,14 +22,17 @@ const mutation = graphql`
 `
 /**
  * Mutation para fazer criar um usuário.
- * @param {string} email O email do usuário que será usuado para efetuar login.
- * @param {string} password A senha do usuário que será usuada para efetuar login.
- * @param {function} callback Callback de sucesso, quando o login for efetuado.
- * @param {function} errorCallback Callback de erro, quando o login não for efetuado.
+ * @param {string} fullName O nome completo do usuário que será cadastrado.
+ * @param {string} userName O nome de usuário do usuário que será cadastrado.
+ * @param {string} email O email do usuário que será cadastrado.
+ * @param {string} password A senha do usuário que será cadastrado.
+ * @param {function} callback Callback de sucesso, quando o cadastro for efetuado.
+ * @param {function} errorCallback Callback de erro, quando o cadastro não for efetuado.
  */
-export default (userName, email, password, callback, errorCallback) => {
+export default (fullName, userName, email, password, callback, errorCallback) => {
   const variables = {
     createUserInput: {
+      fullName,
       userName,
       authProvider: {
         email: {
