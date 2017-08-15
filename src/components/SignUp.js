@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import { InputGroup, Position, Toaster, Intent } from "@blueprintjs/core";
 import { validateEmail, showToast, sendEmail } from '../utils'
 
@@ -7,13 +9,11 @@ class SignUp extends Component {
   refHandlers = {
     toaster: (ref: Toaster) => this.toaster = ref,
   };
-
   state = {
     email: '',
   };
 
   render() {
-
     return (
       <div className="outer">
         <div className="middle">
@@ -24,10 +24,10 @@ class SignUp extends Component {
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
                   <InputGroup leftIconName="envelope" placeholder="Email"
-                  onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email}/>
+                    onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
                   <button type="button" className="pt-button pt-intent-primary pt-fill"
-                  onClick={() => this.confirmEmail()}>
-                    Sign Up
+                    onClick={() => this.confirmEmail()}>
+                    <FormattedMessage id="signup.inscricao" />
                   </button>
                 </div>
               </div>
@@ -50,35 +50,39 @@ class SignUp extends Component {
   * Confirma o e-mail do usuário, se este for válido.
   */
   confirmEmail = () => {
-    if(validateEmail(this.state.email)){
+    if (validateEmail(this.state.email)) {
       var body = {
         template: 'activateAccount',
         params: {
-          header: 'Ative a sua Conta',
+          header: this.context.intl.formatMessage({id: 'signup.email-cabecalho' }),
           iconURL: 'http://cdn.htmlemailtemplates.net/images/activate.png',
-          message: 'Obrigado por se registrar conosco. Para ativar a sua conta, clique no botão abaixo.',
-          buttonText: 'ATIVE A SUA CONTA',
+          message: this.context.intl.formatMessage({id: 'signup.email-mensagem' }),
+          buttonText: this.context.intl.formatMessage({id: 'signup.email-botao' }),
           buttonURL: 'http://sweet-suit.surge.sh/signup-confirmation/' + this.state.email,
           footer: 'footer'
         },
         refferals: {
           to: this.state.email,
           from: 'time-machine@getty.io',
-          subject: 'E-mail Confirmation'
+          subject: this.context.intl.formatMessage({id: 'signup.email-assunto' })
         }
       };
       sendEmail(body,
         (res) => {
-          showToast(this.toaster, Intent.SUCCESS, 'Confirmation E-mail Sent');
+          showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({id: 'signup.email-enviado' }));
         },
         (err) => {
           console.log(err);
-          showToast(this.toaster, Intent.DANGER, 'Unexpected Error');
+          showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'signup.erro-inesperado' }));
         });
-      }else{
-        showToast(this.toaster, Intent.DANGER, 'Invalid E-mail');
-      }
+    } else {
+      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'signup.email-invalido' }));
     }
+  }
 }
+
+SignUp.contextTypes = {
+  intl: PropTypes.object.isRequired
+};
 
 export default SignUp
