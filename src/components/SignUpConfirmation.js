@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import CreateUserMutation from '../mutations/CreateUserMutation'
 import { InputGroup, Position, Toaster, Intent } from "@blueprintjs/core";
 import { validateEmail, showToast, saveUserData, sendEmail } from '../utils'
@@ -28,15 +30,15 @@ class SignUpConfirmation extends Component {
               <h2 className="title">taskapp</h2>
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
-                  <InputGroup leftIconName="user" placeholder="User Name"
-                  onChange={(e) => this.setState({ name: e.target.value })} value={this.state.name}/>
-                  <InputGroup leftIconName="lock" placeholder="Type your password" type="password"
-                  onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password}/>
-                  <InputGroup leftIconName="lock" placeholder="Confirm your password" type="password"
-                  onChange={(e) => this.setState({ passwordConfirmation: e.target.value })} value={this.state.passwordConfirmation}/>
+                  <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-usuario' })}
+                    onChange={(e) => this.setState({ name: e.target.value })} value={this.state.name} />
+                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.digitar-senha' })}
+                    type="password" onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
+                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.confirmar-senha' })}
+                    type="password" onChange={(e) => this.setState({ passwordConfirmation: e.target.value })} value={this.state.passwordConfirmation} />
                   <button type="button" className="pt-button pt-intent-primary pt-fill"
-                  onClick={() => this.validateUserInfo()}>
-                    Create Account
+                    onClick={() => this.validateUserInfo()}>
+                    <FormattedMessage id="signup-confirmation.criar-conta" />
                   </button>
                 </div>
               </div>
@@ -52,25 +54,25 @@ class SignUpConfirmation extends Component {
           </div>
         </div>
       </div>
-
     )
   }
+
   /**
    * Valida as informações do usuário: e-mail e senha.
    */
-  validateUserInfo(){
-    if(this.state.name){
-      if(validateEmail(this.state.email)){
-        if(this.validatePassword(this.state.password) && this.state.password === this.state.passwordConfirmation){
+  validateUserInfo() {
+    if (this.state.name) {
+      if (validateEmail(this.state.email)) {
+        if (this.validatePassword(this.state.password) && this.state.password === this.state.passwordConfirmation) {
           this.createAccount();
-        }else{
-          showToast(this.toaster, Intent.DANGER, 'Invalid Password');
+        } else {
+          showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.senha-invalida' }));
         }
-      }else{
-        showToast(this.toaster, Intent.DANGER, 'Invalid E-mail');
+      } else {
+        showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.email-invalida' }));
       }
-    }else{
-      showToast(this.toaster, Intent.DANGER, 'Please fill in your name, sir.');
+    } else {
+      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.preencher-nome' }));
     }
   }
 
@@ -95,9 +97,9 @@ class SignUpConfirmation extends Component {
         this.props.history.push(`/`);
       }
       this.sendThankYouEmail();
-      showToast(this.toaster, Intent.SUCCESS, 'Account created with success! We will redirect you to login.', onDismiss);
+      showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({ id: 'signup-confirmation.conta-criada' }), onDismiss);
     }, (errorMessage) => {
-      showToast(this.toaster, Intent.DANGER, errorMessage);
+      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.usuario-existente' }));
     });
   }
 
@@ -108,28 +110,31 @@ class SignUpConfirmation extends Component {
     var body = {
       template: 'registrationThanks',
       params: {
-        header: 'Welcome',
+        header: this.context.intl.formatMessage({ id: 'signup-confirmation.email-cabecalho' }),
         iconURL: 'http://cdn.htmlemailtemplates.net/images/ok.png',
-        helloMessage: 'Hello ' + this.state.name,
-        firstParagraph: 'Thanks for joining. We are really excited to have you on board.',
-        secondParagraph: '10,000+ businesses worldwide use Startup Email Templates to stay connected with their customers.',
-        buttonMessage: 'LOGIN TO YOUR ACCOUNT',
+        helloMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-alo' }) + this.state.name,
+        firstParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-primeiro-paragrafo' }),
+        secondParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-segundo-paragrafo' }),
+        buttonMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-botao' }),
         buttonURL: 'http://www.google.com',
-        questionText: 'Have a question?',
-        knowledgeBaseMessage: 'For a quick answer, check our',
+        questionText: this.context.intl.formatMessage({ id: 'signup-confirmation.email-pergunta' }),
+        knowledgeBaseMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-conhecimento' }),
         knowledgeBaseURL: 'http://www.google.com',
-        knowledgeBaseURLText: 'Knowledge Base.',
+        knowledgeBaseURLText: this.context.intl.formatMessage({ id: 'signup-confirmation.email-texto-conhecimento' }),
         footer: 'footer'
       },
       refferals: {
         to: this.state.email,
         from: 'time-machine@getty.io',
-        subject: 'E-mail Confirmation'
+        subject: this.context.intl.formatMessage({ id: 'signup-confirmation.email-assunto' })
       }
     };
-    sendEmail(body, (res) => {}, (err) => {});
+    sendEmail(body, (res) => { }, (err) => { });
   }
-
 }
+
+SignUpConfirmation.contextTypes = {
+  intl: PropTypes.object.isRequired
+};
 
 export default SignUpConfirmation

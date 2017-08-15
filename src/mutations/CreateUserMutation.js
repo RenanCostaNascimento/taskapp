@@ -20,7 +20,13 @@ const mutation = graphql`
     }
   }
 `
-
+/**
+ * Mutation para fazer criar um usuário.
+ * @param {string} email O email do usuário que será usuado para efetuar login.
+ * @param {string} password A senha do usuário que será usuada para efetuar login.
+ * @param {function} callback Callback de sucesso, quando o login for efetuado.
+ * @param {function} errorCallback Callback de erro, quando o login não for efetuado.
+ */
 export default (name, email, password, callback, errorCallback) => {
   const variables = {
     createUserInput: {
@@ -53,8 +59,7 @@ export default (name, email, password, callback, errorCallback) => {
         callback(id, token)
       },
       onError: err => {
-        const errorMessage = err.source.errors[0].message;
-        errorCallback(errorMessage);
+        errorCallback();
       },
     },
   )
