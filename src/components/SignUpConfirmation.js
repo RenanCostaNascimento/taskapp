@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import CreateUserMutation from '../mutations/CreateUserMutation'
-import { InputGroup, Position, Toaster, Intent } from "@blueprintjs/core";
+import { InputGroup, Position, Toaster, Intent, Spinner } from "@blueprintjs/core";
 import { validateEmail, showToast, saveUserData, sendEmail } from '../utils'
 
 class SignUpConfirmation extends Component {
@@ -13,7 +13,8 @@ class SignUpConfirmation extends Component {
       userName: '',
       email: this.props.match.params.email,
       password: '',
-      passwordConfirmation: ''
+      passwordConfirmation: '',
+      loading: false
     };
   }
   toaster: Toaster;
@@ -44,6 +45,7 @@ class SignUpConfirmation extends Component {
                     <FormattedMessage id="signup-confirmation.criar-conta" />
                   </button>
                 </div>
+                {this.state.loading && <Spinner className="pt-intent-primary pt-small" />}
               </div>
               <div className="footer">
                 <div className="footer-text">
@@ -93,15 +95,18 @@ class SignUpConfirmation extends Component {
   * Tenta criar a conta do usuário;
   */
   createAccount = () => {
+    this.setState({ loading: true });
     const { fullName, userName, email, password } = this.state
     CreateUserMutation(fullName, userName, email, password, (id, token) => {
       saveUserData(id, token);
+      this.setState({ loading: false });
       var onDismiss = () => {
         this.props.history.push(`/`);
       }
       this.sendThankYouEmail();
       showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({ id: 'signup-confirmation.conta-criada' }), onDismiss);
     }, (errorMessage) => {
+      this.setState({ loading: false });
       showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.usuario-existente' }));
     });
   }

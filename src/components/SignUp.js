@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import { InputGroup, Position, Toaster, Intent } from "@blueprintjs/core";
+import { InputGroup, Position, Toaster, Intent, Spinner } from "@blueprintjs/core";
 import { validateEmail, showToast, sendEmail } from '../utils'
 
 class SignUp extends Component {
@@ -11,6 +11,7 @@ class SignUp extends Component {
   };
   state = {
     email: '',
+    loading: false
   };
 
   render() {
@@ -30,6 +31,7 @@ class SignUp extends Component {
                     <FormattedMessage id="signup.inscricao" />
                   </button>
                 </div>
+                {this.state.loading && <Spinner className="pt-intent-primary pt-small" />}
               </div>
               <div className="footer">
                 <div className="footer-text">
@@ -51,6 +53,7 @@ class SignUp extends Component {
   */
   confirmEmail = () => {
     if (validateEmail(this.state.email)) {
+      this.setState({ loading: true });
       var body = {
         template: 'activateAccount',
         params: {
@@ -69,10 +72,12 @@ class SignUp extends Component {
       };
       sendEmail(body,
         (res) => {
+          this.setState({ loading: false });
           showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({id: 'signup.email-enviado' }));
         },
         (err) => {
           console.log(err);
+          this.setState({ loading: false });
           showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'signup.erro-inesperado' }));
         });
     } else {
