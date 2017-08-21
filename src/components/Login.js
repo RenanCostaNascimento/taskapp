@@ -1,19 +1,23 @@
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import SigninUserMutation from '../mutations/SigninUserMutation'
 import { InputGroup, Position, Toaster, Intent, Spinner } from "@blueprintjs/core";
 import { showToast, saveUserData } from '../utils'
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      loading: false
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
   toaster: Toaster;
   refHandlers = {
     toaster: (ref: Toaster) => this.toaster = ref,
-  };
-  state = {
-    email: '',
-    password: '',
-    loading: false
   };
 
   render() {
@@ -26,19 +30,18 @@ class Login extends Component {
               <h2 className="title">taskapp</h2>
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
-                  <InputGroup leftIconName="envelope" placeholder="Email"
-                    onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
-                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'login.senha' })} type="password"
-                    onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
+                  <InputGroup name="email" leftIconName="envelope" placeholder="Email" onChange={this.handleInputChange} />
+                  <InputGroup name="password" type="password" leftIconName="lock" placeholder={this.translateText('login.senha')}
+                    onChange={this.handleInputChange} />
                   <button type="button" className="pt-button pt-intent-primary pt-fill" onClick={() => this.validateUserInfo()}>
-                    <FormattedMessage id="login.entrar" />
+                    {this.translateText('login.entrar')}
                   </button>
                   <br /><br />
-                  <FormattedMessage id="comum.ou" />
+                  {this.translateText('comum.ou')}
                   <br /><br />
-                  <a onClick={() => this.props.history.push(`/signup`)}><FormattedMessage id="login.criar-conta" /></a>
+                  <a onClick={() => this.navigateToUrl('signup')}>{this.translateText('login.criar-conta')}</a>
                 </div>
-                {this.state.loading && <Spinner className="pt-intent-primary pt-small" />}
+                {this.showLoading()}
               </div>
               <div className="footer">
                 <div className="footer-text">
@@ -60,7 +63,7 @@ class Login extends Component {
   * @return {[type]} [description]
   */
   validateUserInfo() {
-    this.state.email && this.state.password ? this.login() : showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'login.preencher-formulario' }));
+    this.state.email && this.state.password ? this.login() : showToast(this.toaster, Intent.DANGER, this.translateText('login.preencher-formulario'));
   }
 
   /**
@@ -72,11 +75,45 @@ class Login extends Component {
     SigninUserMutation(email, password, (id, token) => {
       this.setState({ loading: false });
       saveUserData(id, token);
-      showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({ id: 'login.sucesso' }));
+      showToast(this.toaster, Intent.SUCCESS, this.translateText('login.sucesso'));
     }, () => {
       this.setState({ loading: false });
-      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'login.falha' }));
+      showToast(this.toaster, Intent.DANGER, this.translateText('login.falha'));
     });
+  }
+
+  /**
+   * Atualiza o state conforme interação do usuário.
+   * @param event O evento de mudança que foi disparado.
+   */
+  handleInputChange(event) {
+    const name = event.target.name;
+    this.setState({ [name]: event.target.value });
+  }
+
+  /**
+   * Verifica se deve ou não mostrar o componente de loading.
+   */
+  showLoading() {
+    if (this.state.loading) {
+      return <Spinner className="pt-intent-primary pt-small" />;
+    }
+  }
+
+  /**
+     * Traduz um texto usando i18n.
+     * @param {string} text O identificador do texto que deve ser traduzido.
+     */
+    translateText(text: string) {
+      return this.context.intl.formatMessage({ id: text });
+    }
+
+  /**
+   * Navega para a URL especificada.
+   * @param {string} url A url para a qual se dejesa navegar.
+   */
+  navigateToUrl(url: string) {
+    this.props.history.push('/' + url);
   }
 
 }
