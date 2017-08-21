@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { InputGroup, Position, Toaster, Intent, Spinner } from "@blueprintjs/core";
 import { validateEmail, showToast, sendEmail } from '../utils'
 
 class SignUp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      loading: false
+    };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
   toaster: Toaster;
   refHandlers = {
     toaster: (ref: Toaster) => this.toaster = ref,
-  };
-  state = {
-    email: '',
-    loading: false
   };
 
   render() {
@@ -24,14 +28,13 @@ class SignUp extends Component {
               <h2 className="title">taskapp</h2>
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
-                  <InputGroup leftIconName="envelope" placeholder="Email"
-                    onChange={(e) => this.setState({ email: e.target.value })} value={this.state.email} />
+                  <InputGroup name="email" leftIconName="envelope" placeholder="Email" onChange={this.handleInputChange}/>
                   <button type="button" className="pt-button pt-intent-primary pt-fill"
                     onClick={() => this.confirmEmail()}>
-                    <FormattedMessage id="signup.inscricao" />
+                    {this.translateText('signup.inscricao')}
                   </button>
                 </div>
-                {this.state.loading && <Spinner className="pt-intent-primary pt-small" />}
+                {this.showLoading()}
               </div>
               <div className="footer">
                 <div className="footer-text">
@@ -57,32 +60,58 @@ class SignUp extends Component {
       var body = {
         template: 'activateAccount',
         params: {
-          header: this.context.intl.formatMessage({id: 'signup.email-cabecalho' }),
+          header: this.translateText('signup.email-cabecalho'),
           iconURL: 'http://cdn.htmlemailtemplates.net/images/activate.png',
-          message: this.context.intl.formatMessage({id: 'signup.email-mensagem' }),
-          buttonText: this.context.intl.formatMessage({id: 'signup.email-botao' }),
+          message: this.translateText('signup.email-mensagem'),
+          buttonText: this.translateText('signup.email-botao'),
           buttonURL: 'http://sweet-suit.surge.sh/signup-confirmation/' + this.state.email,
           footer: 'footer'
         },
         refferals: {
           to: this.state.email,
           from: 'time-machine@getty.io',
-          subject: this.context.intl.formatMessage({id: 'signup.email-assunto' })
+          subject: this.translateText('signup.email-assunto')
         }
       };
       sendEmail(body,
         (res) => {
           this.setState({ loading: false });
-          showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({id: 'signup.email-enviado' }));
+          showToast(this.toaster, Intent.SUCCESS, this.translateText('signup.email-enviado'));
         },
         (err) => {
           console.log(err);
           this.setState({ loading: false });
-          showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'signup.erro-inesperado' }));
+          showToast(this.toaster, Intent.DANGER, this.translateText('signup.erro-inesperado'));
         });
     } else {
-      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({id: 'signup.email-invalido' }));
+      showToast(this.toaster, Intent.DANGER, this.translateText('signup.email-invalido'));
     }
+  }
+
+  /**
+   * Atualiza o state conforme interação do usuário.
+   * @param event O evento de mudança que foi disparado.
+   */
+  handleInputChange(event) {
+    const name = event.target.name;
+    this.setState({ [name]: event.target.value });
+  }
+
+  /**
+   * Verifica se deve ou não mostrar o componente de loading.
+   */
+  showLoading() {
+    if (this.state.loading) {
+      return <Spinner className="pt-intent-primary pt-small" />;
+    }
+  }
+
+  /**
+     * Traduz um texto usando i18n.
+     * @param {string} text O identificador do texto que deve ser traduzido.
+     */
+  translateText(text: string) {
+    return this.context.intl.formatMessage({ id: text });
   }
 }
 
