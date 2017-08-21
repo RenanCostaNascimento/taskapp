@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import CreateUserMutation from '../mutations/CreateUserMutation'
 import { InputGroup, Position, Toaster, Intent, Spinner } from "@blueprintjs/core";
@@ -16,6 +15,8 @@ class SignUpConfirmation extends Component {
       passwordConfirmation: '',
       loading: false
     };
+
+    this.handleInputChange = this.handleInputChange.bind(this);
   }
   toaster: Toaster;
   refHandlers = {
@@ -32,20 +33,20 @@ class SignUpConfirmation extends Component {
               <h2 className="title">taskapp</h2>
               <div className="col-lg-2 col-sm-4 col-md-4 col-xs-4">
                 <div className="col-xs-12">
-                  <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-completo' })}
-                    onChange={(e) => this.setState({ fullName: e.target.value })} value={this.state.fullName} />
-                  <InputGroup leftIconName="user" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.nome-usuario' })}
-                    onChange={(e) => this.setState({ userName: e.target.value })} value={this.state.userName} />
-                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.digitar-senha' })}
-                    type="password" onChange={(e) => this.setState({ password: e.target.value })} value={this.state.password} />
-                  <InputGroup leftIconName="lock" placeholder={this.context.intl.formatMessage({ id: 'signup-confirmation.confirmar-senha' })}
-                    type="password" onChange={(e) => this.setState({ passwordConfirmation: e.target.value })} value={this.state.passwordConfirmation} />
+                  <InputGroup name="fullName" leftIconName="user" onChange={this.handleInputChange}
+                    placeholder={this.translateText('signup-confirmation.nome-completo')} />
+                  <InputGroup name="userName" leftIconName="user" onChange={this.handleInputChange}
+                    placeholder={this.translateText('signup-confirmation.nome-usuario')} />
+                  <InputGroup name="password" type="password" leftIconName="lock" onChange={this.handleInputChange}
+                    placeholder={this.translateText('signup-confirmation.digitar-senha')} />
+                  <InputGroup name="passwordConfirmation" type="password" leftIconName="lock" onChange={this.handleInputChange}
+                    placeholder={this.translateText('signup-confirmation.confirmar-senha')} />
                   <button type="button" className="pt-button pt-intent-primary pt-fill"
                     onClick={() => this.validateUserInfo()}>
-                    <FormattedMessage id="signup-confirmation.criar-conta" />
+                    {this.translateText('signup-confirmation.criar-conta')}
                   </button>
                 </div>
-                {this.state.loading && <Spinner className="pt-intent-primary pt-small" />}
+                {this.showLoading()}
               </div>
               <div className="footer">
                 <div className="footer-text">
@@ -71,13 +72,13 @@ class SignUpConfirmation extends Component {
         if (this.validatePassword(this.state.password) && this.state.password === this.state.passwordConfirmation) {
           this.createAccount();
         } else {
-          showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.senha-invalida' }));
+          showToast(this.toaster, Intent.DANGER, this.translateText('signup-confirmation.senha-invalida'));
         }
       } else {
-        showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.email-invalida' }));
+        showToast(this.toaster, Intent.DANGER, this.translateText('signup-confirmation.email-invalida'));
       }
     } else {
-      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.preencher-nome' }));
+      showToast(this.toaster, Intent.DANGER, this.translateText('signup-confirmation.preencher-nome'));
     }
   }
 
@@ -104,10 +105,10 @@ class SignUpConfirmation extends Component {
         this.props.history.push(`/`);
       }
       this.sendThankYouEmail();
-      showToast(this.toaster, Intent.SUCCESS, this.context.intl.formatMessage({ id: 'signup-confirmation.conta-criada' }), onDismiss);
+      showToast(this.toaster, Intent.SUCCESS, this.translateText('signup-confirmation.conta-criada'), onDismiss);
     }, (errorMessage) => {
       this.setState({ loading: false });
-      showToast(this.toaster, Intent.DANGER, this.context.intl.formatMessage({ id: 'signup-confirmation.usuario-existente' }));
+      showToast(this.toaster, Intent.DANGER, this.translateText('signup-confirmation.usuario-existente'));
     });
   }
 
@@ -118,26 +119,52 @@ class SignUpConfirmation extends Component {
     var body = {
       template: 'registrationThanks',
       params: {
-        header: this.context.intl.formatMessage({ id: 'signup-confirmation.email-cabecalho' }),
+        header: this.translateText('signup-confirmation.email-cabecalho'),
         iconURL: 'http://cdn.htmlemailtemplates.net/images/ok.png',
-        helloMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-alo' }) + this.state.userName,
-        firstParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-primeiro-paragrafo' }),
-        secondParagraph: this.context.intl.formatMessage({ id: 'signup-confirmation.email-segundo-paragrafo' }),
-        buttonMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-botao' }),
+        helloMessage: this.translateText('signup-confirmation.email-mensagem-alo') + this.state.userName,
+        firstParagraph: this.translateText('signup-confirmation.email-primeiro-paragrafo'),
+        secondParagraph: this.translateText('signup-confirmation.email-segundo-paragrafo'),
+        buttonMessage: this.translateText('signup-confirmation.email-botao'),
         buttonURL: 'http://www.google.com',
-        questionText: this.context.intl.formatMessage({ id: 'signup-confirmation.email-pergunta' }),
-        knowledgeBaseMessage: this.context.intl.formatMessage({ id: 'signup-confirmation.email-mensagem-conhecimento' }),
+        questionText: this.translateText('signup-confirmation.email-pergunta'),
+        knowledgeBaseMessage: this.translateText('signup-confirmation.email-mensagem-conhecimento'),
         knowledgeBaseURL: 'http://www.google.com',
-        knowledgeBaseURLText: this.context.intl.formatMessage({ id: 'signup-confirmation.email-texto-conhecimento' }),
+        knowledgeBaseURLText: this.translateText('signup-confirmation.email-texto-conhecimento'),
         footer: 'footer'
       },
       refferals: {
         to: this.state.email,
         from: 'time-machine@getty.io',
-        subject: this.context.intl.formatMessage({ id: 'signup-confirmation.email-assunto' })
+        subject: this.translateText('signup-confirmation.email-assunto')
       }
     };
     sendEmail(body, (res) => { }, (err) => { });
+  }
+
+  /**
+   * Atualiza o state conforme interação do usuário.
+   * @param event O evento de mudança que foi disparado.
+   */
+  handleInputChange(event) {
+    const name = event.target.name;
+    this.setState({ [name]: event.target.value });
+  }
+
+  /**
+   * Verifica se deve ou não mostrar o componente de loading.
+   */
+  showLoading() {
+    if (this.state.loading) {
+      return <Spinner className="pt-intent-primary pt-small" />;
+    }
+  }
+
+  /**
+     * Traduz um texto usando i18n.
+     * @param {string} text O identificador do texto que deve ser traduzido.
+     */
+  translateText(text: string) {
+    return this.context.intl.formatMessage({ id: text });
   }
 }
 
