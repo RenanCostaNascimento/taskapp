@@ -58,7 +58,8 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "relay": "relay-compiler --src ./src --schema ./schema.graphql",
+    "relay-compiler": "relay-compiler --src ./src --schema ./schema.graphql",
+    "update-schema": "get-graphql-schema https://api.graph.cool/relay/v1/cj5eh3xx6f2nw0127yiduyb9d > ./schema.graphql",
     "deploy": "npm run build && mv build/index.html build/200.html && surge build http://sweet-suit.surge.sh"
   },
   "jest": {
