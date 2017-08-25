@@ -12,17 +12,6 @@ export default {
             "falha": "No user found with that information"
         },
         "signup": {
-            "inscricao": "Sign Up",
-            "email-enviado": "Confirmation email sent",
-            "erro-inesperado": "Unexpected error",
-            "email-invalido": "Invalid email",
-            "email-assunto": "Email Confirmation",
-            "email-cabecalho": "ACTIVATE YOUR ACCOUNT",
-            "email-mensagem": "Thank you for registering with us. To activate your account, click the button below.",
-            "email-botao": "Activate your account",
-            "preencher-formulario": "Please, fill in the form"
-        },
-        "signup-confirmation": {
             "nome-completo": "Full Name",
             "nome-usuario": "User Name",
             "digitar-senha": "Type your password",
@@ -30,18 +19,19 @@ export default {
             "criar-conta": "Create Account",
             "senha-invalida": "Invalid Password",
             "email-invalido": "Invalid Email",
-            "preencher-nome": "Please fill in your name, sir.",
-            "conta-criada": "Account created with success! We will redirect you to login.",
+            "preencher-nome": "Please fill in your full name and user name",
+            "conta-criada": "That's it, account created! Now you just need to activate it in your email.",
             "usuario-existente": "User already exists with that information",
-            "email-assunto": "Email Validation",
-            "email-cabecalho": "Welcome",
-            "email-mensagem-alo": "Hello ",
-            "email-primeiro-paragrafo": "Thanks for joining. We are really excited to have you on board.",
-            "email-segundo-paragrafo": "We hope you enjoy our content!",
-            "email-botao": "LOGIN TO YOUR ACCOUNT",
-            "email-pergunta": "Have a question?",
-            "email-mensagem-conhecimento": "For a quick answer, check our",
-            "email-texto-conhecimento": "Knowledge Base."
+            "email-enviado": "Confirmation email sent",
+            "erro-inesperado": "Unexpected error",
+            "preencher-formulario": "Please, fill in the form"
+        },
+        "signup-confirmation": {
+            "token-invalido": "Invalid Token!",
+            "email-confirmado": "Email Confirmed!",
+            "cadastro-completo": "Your registration is complete, ",
+            "efetuar-login": "click here to log in!",
+            "validando-email": "Validating email..."
         }
     },
     "pt-BR": {
@@ -57,36 +47,26 @@ export default {
             "falha": "Nenhum usuário encontrado com essas informações"
         },
         "signup": {
-            "inscricao": "Inscrever-se",
-            "email-enviado": "Email de confirmação enviado",
-            "erro-inesperado": "Erro inesperado",
-            "email-invalido": "Email inválido",
-            "email-assunto": "Confirmação de Email",
-            "email-cabecalho": "ATIVE SUA CONTA",
-            "email-mensagem": "Obrigado por se registrar conosco. Para ativar a sua conta, clique no botão abaixo.",
-            "email-botao": "Ativa sua conta",
-            "preencher-formulario": "Por favor, preencha o formulário"
-        },
-        "signup-confirmation": {
-            "nome-completo": "Nome Completo",
-            "nome-usuario": "Nome do Usuário",
+            "nome-completo": "Nome completo",
+            "nome-usuario": "Nome de usuário",
             "digitar-senha": "Digite sua senha",
             "confirmar-senha": "Confirme sua senha",
             "criar-conta": "Criar Conta",
-            "senha-invalida": "Senha inválida",
-            "email-invalido": "Email inválido",
-            "preencher-nome": "Por favor, preencha seu nome",
-            "conta-criada": "Conta criada com sucesso! Nós vamos te redirecionar para a tela de login",
+            "senha-invalida": "Senha Inválida",
+            "email-invalido": "Email Inválido",
+            "preencher-nome": "Por favor, preenchar seu nome completo e nome de usuário",
+            "conta-criada": "Pronto, conta criada! Agora vocÊ só precisa ativá-la no seu email.",
             "usuario-existente": "Usuário já existente com essas informações",
-            "email-assunto": "Validação de Email",
-            "email-cabecalho": "Bem Vindo",
-            "email-mensagem-alo": "Olá ",
-            "email-primeiro-paragrafo": "Obrigado por juntar-se a nós! Estamos muito animados de tê-lo à bordo!",
-            "email-segundo-paragrafo": "Esperamos que goste do nosso conteúdo!",
-            "email-botao": "FAÇA LOGIN",
-            "email-pergunta": "Tem uma pergunta?",
-            "email-mensagem-conhecimento": "Para uma resposta rápida, visualize nossa",
-            "email-texto-conhecimento": "Base de Conhecimento."
+            "email-enviado": "Email de confirmação enviado",
+            "erro-inesperado": "Erro inesperado",
+            "preencher-formulario": "Por favor, preencha o formulário"
+        },
+        "signup-confirmation": {
+            "token-invalido": "Token Inválido!",
+            "email-confirmado": "Email Confirmado!",
+            "cadastro-completo": "Seu cadastro está completo, ",
+            "efetuar-login": "clique aqui para efetuar login!",
+            "validando-email": "Valiando email..."
         }
     }
 }

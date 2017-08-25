@@ -5,15 +5,8 @@ import {
 import environment from '../Environment'
 
 const mutation = graphql`
-  mutation CreateUserMutation($createUserInput: SignupUserInput!, $signinUserInput: SigninUserInput!) {
+  mutation CreateUserMutation($createUserInput: SignupUserInput!) {
     createUser(input: $createUserInput) {
-      user {
-        id
-      }
-    }
-
-    signinUser(input: $signinUserInput) {
-      token
       user {
         id
       }
@@ -42,13 +35,6 @@ export default (fullName, userName, email, password, callback, errorCallback) =>
       },
       clientMutationId: ""
     },
-    signinUserInput: {
-      email: {
-        email,
-        password
-      },
-      clientMutationId: ""
-    }
   }
 
   commitMutation(
@@ -57,9 +43,7 @@ export default (fullName, userName, email, password, callback, errorCallback) =>
       mutation,
       variables,
       onCompleted: (response) => {
-        const id = response.createUser.user.id
-        const token = response.signinUser.token
-        callback(id, token)
+        callback()
       },
       onError: err => {
         errorCallback();

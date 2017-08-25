@@ -11,7 +11,7 @@ class App extends Component {
         <Switch>
           <Route exact path='/' component={Login}/>
           <Route exact path='/signup' component={SignUp}/>
-          <Route exact path='/signup-confirmation/:email' component={SignUpConfirmation}/>
+          <Route exact path='/signup-confirmation/:token' component={SignUpConfirmation}/>
         </Switch>
       </div>
     );

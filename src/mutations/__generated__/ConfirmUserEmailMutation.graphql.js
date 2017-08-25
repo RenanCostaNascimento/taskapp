@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 160a39f4aa94ab5ad5c21b9dd707ffba
+ * @relayHash 53167c4cbe5ec755fc2fa8162dad3133
  */
 
 /* eslint-disable */
@@ -9,21 +9,19 @@
 
 /*::
 import type {ConcreteBatch} from 'relay-runtime';
-export type CreateUserMutationVariables = {|
-  createUserInput: {
-    name?: ?string;
+export type ConfirmUserEmailMutationVariables = {|
+  input: {
+    emailConfirmationToken?: ?string;
+    fullName?: ?string;
+    id: string;
+    isEmailConfirmed?: ?boolean;
+    userName?: ?string;
     clientMutationId: string;
-    authProvider: {
-      email?: ?{
-        email: string;
-        password: string;
-      };
-    };
   };
 |};
 
-export type CreateUserMutationResponse = {|
-  +createUser: {|
+export type ConfirmUserEmailMutationResponse = {|
+  +updateUser: ?{|
     +user: ?{|
       +id: string;
     |};
@@ -33,10 +31,10 @@ export type CreateUserMutationResponse = {|
 
 
 /*
-mutation CreateUserMutation(
-  $createUserInput: SignupUserInput!
+mutation ConfirmUserEmailMutation(
+  $input: UpdateUserInput!
 ) {
-  createUser(input: $createUserInput) {
+  updateUser(input: $input) {
     user {
       id
     }
@@ -49,14 +47,14 @@ const batch /*: ConcreteBatch*/ = {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "createUserInput",
-        "type": "SignupUserInput!",
+        "name": "input",
+        "type": "UpdateUserInput!",
         "defaultValue": null
       }
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "CreateUserMutation",
+    "name": "ConfirmUserEmailMutation",
     "selections": [
       {
         "kind": "LinkedField",
@@ -65,12 +63,12 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "Variable",
             "name": "input",
-            "variableName": "createUserInput",
-            "type": "SignupUserInput!"
+            "variableName": "input",
+            "type": "UpdateUserInput!"
           }
         ],
-        "concreteType": "CreateUserPayload",
-        "name": "createUser",
+        "concreteType": "UpdateUserPayload",
+        "name": "updateUser",
         "plural": false,
         "selections": [
           {
@@ -100,18 +98,18 @@ const batch /*: ConcreteBatch*/ = {
   "id": null,
   "kind": "Batch",
   "metadata": {},
-  "name": "CreateUserMutation",
+  "name": "ConfirmUserEmailMutation",
   "query": {
     "argumentDefinitions": [
       {
         "kind": "LocalArgument",
-        "name": "createUserInput",
-        "type": "SignupUserInput!",
+        "name": "input",
+        "type": "UpdateUserInput!",
         "defaultValue": null
       }
     ],
     "kind": "Root",
-    "name": "CreateUserMutation",
+    "name": "ConfirmUserEmailMutation",
     "operation": "mutation",
     "selections": [
       {
@@ -121,12 +119,12 @@ const batch /*: ConcreteBatch*/ = {
           {
             "kind": "Variable",
             "name": "input",
-            "variableName": "createUserInput",
-            "type": "SignupUserInput!"
+            "variableName": "input",
+            "type": "UpdateUserInput!"
           }
         ],
-        "concreteType": "CreateUserPayload",
-        "name": "createUser",
+        "concreteType": "UpdateUserPayload",
+        "name": "updateUser",
         "plural": false,
         "selections": [
           {
@@ -152,7 +150,7 @@ const batch /*: ConcreteBatch*/ = {
       }
     ]
   },
-  "text": "mutation CreateUserMutation(\n  $createUserInput: SignupUserInput!\n) {\n  createUser(input: $createUserInput) {\n    user {\n      id\n    }\n  }\n}\n"
+  "text": "mutation ConfirmUserEmailMutation(\n  $input: UpdateUserInput!\n) {\n  updateUser(input: $input) {\n    user {\n      id\n    }\n  }\n}\n"
 };
 
 module.exports = batch;
