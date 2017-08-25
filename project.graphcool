@@ -1,5 +1,5 @@
 # projectId: cj5eh3xx6f2nw0127yiduyb9d
-# version: 7
+# version: 20
 
 type File implements Node {
   contentType: String!
@@ -20,4 +20,6 @@ type User implements Node {
   updatedAt: DateTime!
   userName: String @isUnique
   fullName: String
+  emailConfirmationToken: String
+  isEmailConfirmed: Boolean
 }

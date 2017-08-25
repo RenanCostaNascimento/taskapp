@@ -7,12 +7,6 @@ input AuthProviderSignupData {
   email: AUTH_PROVIDER_EMAIL
 }
 
-# The `BigDecimal` scalar type represents signed fractional values with arbitrary precision.
-scalar BigDecimal
-
-# The `BigInt` scalar type represents non-fractional signed whole numeric values. BigInt can represent arbitrary big values.
-scalar BigInt
-
 input CreateFile {
   name: String!
 }
@@ -30,7 +24,12 @@ type CreateFilePayload {
 }
 
 input CreateUser {
-  name: String
+  emailConfirmationToken: String
+  fullName: String
+  isEmailConfirmed: Boolean
+
+  # user name
+  userName: String
 }
 
 # If authentication was successful the payload contains the user and a token. If unsuccessful this payload is null.
@@ -393,10 +392,6 @@ enum FileOrderBy {
   url_DESC
 }
 
-# The `Long` scalar type represents non-fractional signed whole numeric values.
-# Long can represent values between -(2^63) and 2^63 - 1.
-scalar Long
-
 type Mutation {
   createFile(input: CreateFileInput!): CreateFilePayload
   updateFile(input: UpdateFileInput!): UpdateFilePayload
@@ -454,8 +449,12 @@ input SigninUserInput {
 }
 
 input SignupUserInput {
+  emailConfirmationToken: String
+  fullName: String
+  isEmailConfirmed: Boolean
+
   # user name
-  name: String
+  userName: String
   clientMutationId: String!
   authProvider: AuthProviderSignupData!
 }
@@ -505,15 +504,23 @@ type UpdateOrCreateUserPayload {
 }
 
 input UpdateUser {
+  emailConfirmationToken: String
+  fullName: String
   id: ID!
-  name: String
+  isEmailConfirmed: Boolean
+
+  # user name
+  userName: String
 }
 
 input UpdateUserInput {
+  emailConfirmationToken: String
+  fullName: String
   id: ID!
+  isEmailConfirmed: Boolean
 
   # user name
-  name: String
+  userName: String
   clientMutationId: String!
 }
 
@@ -527,12 +534,15 @@ type UpdateUserPayload {
 type User implements Node {
   createdAt: DateTime!
   email: String
+  emailConfirmationToken: String
+  fullName: String
   id: ID!
-
-  # user name
-  name: String
+  isEmailConfirmed: Boolean
   password: String
   updatedAt: DateTime!
+
+  # user name
+  userName: String
 }
 
 # A connection to a list of items.
@@ -624,6 +634,86 @@ input UserFilter {
 
   # All values not ending with the given string.
   email_not_ends_with: String
+  emailConfirmationToken: String
+
+  # All values that are not equal to given value.
+  emailConfirmationToken_not: String
+
+  # All values that are contained in given list.
+  emailConfirmationToken_in: [String!]
+
+  # All values that are not contained in given list.
+  emailConfirmationToken_not_in: [String!]
+
+  # All values less than the given value.
+  emailConfirmationToken_lt: String
+
+  # All values less than or equal the given value.
+  emailConfirmationToken_lte: String
+
+  # All values greater than the given value.
+  emailConfirmationToken_gt: String
+
+  # All values greater than or equal the given value.
+  emailConfirmationToken_gte: String
+
+  # All values containing the given string.
+  emailConfirmationToken_contains: String
+
+  # All values not containing the given string.
+  emailConfirmationToken_not_contains: String
+
+  # All values starting with the given string.
+  emailConfirmationToken_starts_with: String
+
+  # All values not starting with the given string.
+  emailConfirmationToken_not_starts_with: String
+
+  # All values ending with the given string.
+  emailConfirmationToken_ends_with: String
+
+  # All values not ending with the given string.
+  emailConfirmationToken_not_ends_with: String
+  fullName: String
+
+  # All values that are not equal to given value.
+  fullName_not: String
+
+  # All values that are contained in given list.
+  fullName_in: [String!]
+
+  # All values that are not contained in given list.
+  fullName_not_in: [String!]
+
+  # All values less than the given value.
+  fullName_lt: String
+
+  # All values less than or equal the given value.
+  fullName_lte: String
+
+  # All values greater than the given value.
+  fullName_gt: String
+
+  # All values greater than or equal the given value.
+  fullName_gte: String
+
+  # All values containing the given string.
+  fullName_contains: String
+
+  # All values not containing the given string.
+  fullName_not_contains: String
+
+  # All values starting with the given string.
+  fullName_starts_with: String
+
+  # All values not starting with the given string.
+  fullName_not_starts_with: String
+
+  # All values ending with the given string.
+  fullName_ends_with: String
+
+  # All values not ending with the given string.
+  fullName_not_ends_with: String
   id: ID
 
   # All values that are not equal to given value.
@@ -664,46 +754,10 @@ input UserFilter {
 
   # All values not ending with the given string.
   id_not_ends_with: ID
-  name: String
+  isEmailConfirmed: Boolean
 
   # All values that are not equal to given value.
-  name_not: String
-
-  # All values that are contained in given list.
-  name_in: [String!]
-
-  # All values that are not contained in given list.
-  name_not_in: [String!]
-
-  # All values less than the given value.
-  name_lt: String
-
-  # All values less than or equal the given value.
-  name_lte: String
-
-  # All values greater than the given value.
-  name_gt: String
-
-  # All values greater than or equal the given value.
-  name_gte: String
-
-  # All values containing the given string.
-  name_contains: String
-
-  # All values not containing the given string.
-  name_not_contains: String
-
-  # All values starting with the given string.
-  name_starts_with: String
-
-  # All values not starting with the given string.
-  name_not_starts_with: String
-
-  # All values ending with the given string.
-  name_ends_with: String
-
-  # All values not ending with the given string.
-  name_not_ends_with: String
+  isEmailConfirmed_not: Boolean
   password: String
 
   # All values that are not equal to given value.
@@ -766,6 +820,46 @@ input UserFilter {
 
   # All values greater than or equal the given value.
   updatedAt_gte: DateTime
+  userName: String
+
+  # All values that are not equal to given value.
+  userName_not: String
+
+  # All values that are contained in given list.
+  userName_in: [String!]
+
+  # All values that are not contained in given list.
+  userName_not_in: [String!]
+
+  # All values less than the given value.
+  userName_lt: String
+
+  # All values less than or equal the given value.
+  userName_lte: String
+
+  # All values greater than the given value.
+  userName_gt: String
+
+  # All values greater than or equal the given value.
+  userName_gte: String
+
+  # All values containing the given string.
+  userName_contains: String
+
+  # All values not containing the given string.
+  userName_not_contains: String
+
+  # All values starting with the given string.
+  userName_starts_with: String
+
+  # All values not starting with the given string.
+  userName_not_starts_with: String
+
+  # All values ending with the given string.
+  userName_ends_with: String
+
+  # All values not ending with the given string.
+  userName_not_ends_with: String
 }
 
 enum UserOrderBy {
@@ -773,14 +867,20 @@ enum UserOrderBy {
   createdAt_DESC
   email_ASC
   email_DESC
+  emailConfirmationToken_ASC
+  emailConfirmationToken_DESC
+  fullName_ASC
+  fullName_DESC
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  isEmailConfirmed_ASC
+  isEmailConfirmed_DESC
   password_ASC
   password_DESC
   updatedAt_ASC
   updatedAt_DESC
+  userName_ASC
+  userName_DESC
 }
 
 # This is the famous Relay viewer object
@@ -789,7 +889,14 @@ type Viewer {
   allUsers(filter: UserFilter, orderBy: UserOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   user: User
   File(id: ID, secret: String, url: String): File
-  User(email: String, id: ID): User
+  User(
+    email: String
+    emailConfirmationToken: String
+    id: ID
+
+    # user name
+    userName: String
+  ): User
   id: ID!
 }
 
